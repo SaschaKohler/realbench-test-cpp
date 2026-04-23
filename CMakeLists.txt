@@ -20,6 +20,10 @@ endif()
 # Add the executable
 add_executable(realbench-test src/main.cpp)
 
+# Link threading library (required for lock contention test)
+find_package(Threads REQUIRED)
+target_link_libraries(realbench-test PRIVATE Threads::Threads)
+
 # Set output directory
 set_target_properties(realbench-test PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
