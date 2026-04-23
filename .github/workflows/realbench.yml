@@ -66,7 +66,23 @@ jobs:
           BINARY_PATH="build/realbench-test"
 
           # Upload to RealBench API
-          RESPONSE=$(curl -sf \
+          echo "Uploading binary to RealBench API..."
+          echo "Binary path: ${BINARY_PATH}"
+          echo "API URL: ${REALBENCH_API_URL:-https://realbench-web.fly.dev}/api/v1/profile"
+          echo "Project ID: ${REALBENCH_PROJECT_ID}"
+          echo "Commit SHA: ${{ github.sha }}"
+          
+          # Check if binary exists
+          if [ ! -f "${BINARY_PATH}" ]; then
+            echo "❌ Binary not found at ${BINARY_PATH}"
+            echo "Available files in build directory:"
+            ls -la build/ || echo "Build directory not found"
+            exit 1
+          fi
+          
+          echo "Binary file size: $(wc -c < "${BINARY_PATH}") bytes"
+          
+          RESPONSE=$(curl -v \
             -F "binary=@${BINARY_PATH}" \
             -F "projectId=${REALBENCH_PROJECT_ID}" \
             -F "commitSha=${{ github.sha }}" \
@@ -76,7 +92,17 @@ jobs:
             ${PR_NUMBER:+-F "githubPrNumber=${PR_NUMBER}"} \
             ${PR_NUMBER:+-F "githubToken=${GITHUB_TOKEN}"} \
             -H "Authorization: Bearer ${REALBENCH_API_KEY}" \
-            "${REALBENCH_API_URL:-https://realbench-web.fly.dev}/api/v1/profile")
+            "${REALBENCH_API_URL:-https://realbench-web.fly.dev}/api/v1/profile" 2>&1)
+          
+          CURL_EXIT_CODE=$?
+          echo "curl exit code: ${CURL_EXIT_CODE}"
+          echo "Response: ${RESPONSE}"
+          
+          if [ ${CURL_EXIT_CODE} -ne 0 ]; then
+            echo "❌ Failed to upload binary to RealBench API"
+            echo "curl exit code: ${CURL_EXIT_CODE}"
+            exit ${CURL_EXIT_CODE}
+          fi
 
           echo "response=${RESPONSE}" >> "$GITHUB_OUTPUT"
           RUN_ID=$(echo "${RESPONSE}" | jq -r '.runId')
