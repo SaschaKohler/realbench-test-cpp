@@ -6,7 +6,7 @@
 #include <thread>
 
 // A computationally intensive function for profiling
-void compute-intensive-task() {
+void compute_intensive_task() {
     const int size = 1000000;
     std::vector<int> data(size);
     
@@ -36,7 +36,7 @@ void compute-intensive-task() {
 }
 
 // Memory allocation stress test
-void memory-stress-test() {
+void memory_stress_test() {
     const int num_allocations = 1000;
     const int allocation_size = 1024 * 1024; // 1MB each
     
@@ -67,7 +67,7 @@ void memory-stress-test() {
 }
 
 // CPU-intensive calculation
-void fibonacci-calculation() {
+void fibonacci_calculation() {
     const int n = 40;
     
     auto fibonacci = [](int n) -> long long {
@@ -98,13 +98,13 @@ int main() {
     
     // Run different computational tasks
     std::cout << "\n1. Running compute-intensive task..." << std::endl;
-    compute-intensive-task();
+    compute_intensive_task();
     
     std::cout << "\n2. Running memory stress test..." << std::endl;
-    memory-stress-test();
+    memory_stress_test();
     
     std::cout << "\n3. Running Fibonacci calculation..." << std::endl;
-    fibonacci-calculation();
+    fibonacci_calculation();
     
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
