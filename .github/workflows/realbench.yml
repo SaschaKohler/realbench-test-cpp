@@ -87,7 +87,7 @@ jobs:
             -F "projectId=${REALBENCH_PROJECT_ID}" \
             -F "commitSha=${{ github.sha }}" \
             -F "branch=${{ github.head_ref || github.ref_name }}" \
-            -F "buildType=release" \
+            -F "buildType=auto" \
             -F "githubRepo=${{ github.repository }}" \
             ${PR_NUMBER:+-F "githubPrNumber=${PR_NUMBER}"} \
             ${PR_NUMBER:+-F "githubToken=${GITHUB_TOKEN}"} \
