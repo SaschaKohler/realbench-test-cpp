@@ -92,13 +92,14 @@ jobs:
             ${PR_NUMBER:+-F "githubPrNumber=${PR_NUMBER}"} \
             ${PR_NUMBER:+-F "githubToken=${GITHUB_TOKEN}"} \
             -H "Authorization: Bearer ${REALBENCH_API_KEY}" \
-            "${REALBENCH_API_URL:-https://realbench-web.fly.dev}/api/v1/profile" 2>&1)
+            "${REALBENCH_API_URL:-https://realbench-web.fly.dev}/profile" 2>&1)
           
           CURL_EXIT_CODE=$?
           echo "curl exit code: ${CURL_EXIT_CODE}"
           echo "Response: ${RESPONSE}"
           
           if [ ${CURL_EXIT_CODE} -ne 0 ]; then
+            echo " Failed to upload binary to RealBench API"
             echo "❌ Failed to upload binary to RealBench API"
             echo "curl exit code: ${CURL_EXIT_CODE}"
             exit ${CURL_EXIT_CODE}
@@ -121,7 +122,7 @@ jobs:
           for i in $(seq 1 30); do
             STATUS=$(curl -sf \
               -H "Authorization: Bearer ${REALBENCH_API_KEY}" \
-              "${REALBENCH_API_URL:-https://realbench-web.fly.dev}/api/v1/runs/${RUN_ID}" \
+              "${REALBENCH_API_URL:-https://realbench-web.fly.dev}/runs/${RUN_ID}" \
               | jq -r '.run.status')
 
             echo "  attempt ${i}: status=${STATUS}"
