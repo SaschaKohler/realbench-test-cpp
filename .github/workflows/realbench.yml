@@ -105,7 +105,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
-    if: github.event.inputs.profiling_mode == 'stat' || github.event.inputs.profiling_mode == 'both'
+    if: github.event.inputs.profiling_mode == null || github.event.inputs.profiling_mode == 'stat' || github.event.inputs.profiling_mode == 'both'
 
     steps:
       - name: Checkout
