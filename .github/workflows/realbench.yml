@@ -42,6 +42,23 @@ jobs:
           REALBENCH_PROJECT_ID: ${{ secrets.REALBENCH_PROJECT_ID }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # Validate required secrets
+          if [ -z "$REALBENCH_API_KEY" ]; then
+            echo "❌ REALBENCH_API_KEY secret is not set"
+            echo "Please set up the required secrets in your repository:"
+            echo "- REALBENCH_API_KEY: Your RealBench API key (starts with rbk_)"
+            echo "- REALBENCH_PROJECT_ID: Your RealBench project UUID"
+            exit 1
+          fi
+          
+          if [ -z "$REALBENCH_PROJECT_ID" ]; then
+            echo "❌ REALBENCH_PROJECT_ID secret is not set"
+            echo "Please set up the required secrets in your repository:"
+            echo "- REALBENCH_API_KEY: Your RealBench API key (starts with rbk_)"
+            echo "- REALBENCH_PROJECT_ID: Your RealBench project UUID"
+            exit 1
+          fi
+
           # Detect PR number (empty for push events)
           PR_NUMBER="${{ github.event.pull_request.number }}"
 
