@@ -63,7 +63,7 @@ jobs:
           PR_NUMBER="${{ github.event.pull_request.number }}"
 
           # Path to the compiled binary
-          BINARY_PATH="build/realbench-test"
+          BINARY_PATH="build/bin/realbench-test"
 
           # Upload to RealBench API
           echo "Uploading binary to RealBench API..."
